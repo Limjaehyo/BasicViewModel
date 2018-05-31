@@ -22,6 +22,7 @@ public class TempRepository extends BaseRepository<BaseModel> {
     }
 
     public Observable<BaseModel> getResponse() {
+        return  null;
         /*return getRetrofitAPI()
                 .getAreaSelect(apiEncryption("leisure_area"), apiEncryption("hotelnjoy"), apiEncryption("gajago"), apiEncryption(isTest()));*/
     }
