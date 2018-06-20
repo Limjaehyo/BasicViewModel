@@ -1,9 +1,9 @@
 package com.example.jaehyolim.viewmodel.viewmodel;
 
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public interface BaseVewModelInterface {
-    CompositeDisposable getDisposable();
+    void putDisposableMap(String tag, Disposable disposable);
 
     void showMessageDialog(String msg);
 

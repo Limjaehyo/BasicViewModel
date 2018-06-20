@@ -5,6 +5,8 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.util.Log;
 
+import java.util.HashMap;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -15,6 +17,7 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
     private boolean enabled = false;
     private  Lifecycle lifecycle;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
+    private HashMap<String, Disposable> saveDisposableMap = new HashMap<>();
 
     public DisposableLifecycleObserver(Lifecycle lifecycle ) {
         this.lifecycle = lifecycle;
@@ -22,9 +25,6 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
     }
 
 
-    public void addDisposable(Disposable disposable) {
-        mDisposable.add(disposable);
-    }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -42,12 +42,21 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
         }
     }
 
-    public CompositeDisposable getDisposable() {
-        return mDisposable;
-    }
 
+    public void putDisposableMap(String tag, Disposable disposable) {
+        if (saveDisposableMap.get(tag) == null) {
+            mDisposable.add(disposable);
+            saveDisposableMap.put(tag, disposable);
+        }else{
+            mDisposable.remove(saveDisposableMap.get(tag));
+            saveDisposableMap.put(tag, disposable);
+            mDisposable.add(disposable);
+        }
+
+    }
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void stop() {
+        saveDisposableMap.clear();
         mDisposable.dispose();
         mDisposable.clear();
         lifecycle.removeObserver(this);

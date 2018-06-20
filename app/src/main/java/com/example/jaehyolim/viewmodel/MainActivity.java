@@ -6,8 +6,6 @@ import android.os.Bundle;
 import com.example.jaehyolim.viewmodel.view.BaseViewModelActivity;
 import com.example.jaehyolim.viewmodel.viewmodel.TempViewModel;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 public class MainActivity extends BaseViewModelActivity<TempViewModel> implements TempViewModel.TempInterface {
 
     @Override
@@ -31,10 +29,6 @@ public class MainActivity extends BaseViewModelActivity<TempViewModel> implement
 
     }
 
-    @Override
-    public CompositeDisposable getDisposable() {
-        return getCompositeDisposable();
-    }
 
     @Override
     public void showMessageDialog(String msg) {

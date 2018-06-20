@@ -16,8 +16,8 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
 
     private DisposableLifecycleObserver observer;
 
-    public abstract T viewModel();
-    public T mViewModel;
+    protected abstract T viewModel();
+    protected T mViewModel;
     private MaterialDialog materialDialog;
 
     @Override
@@ -38,17 +38,12 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     }
 
 
-    public void addDisposable(Disposable disposable) {
-        if (observer != null) {
-            observer.addDisposable(disposable);
+    public void putDisposableMap(String tag, Disposable disposable) {
+        observer.putDisposableMap(tag, disposable);
 
-        }
-//        isFirstCall = true;
     }
 
-    public CompositeDisposable getCompositeDisposable(){
-        return observer.getDisposable();
-    }
+
 
     @Override
     protected void onStop() {

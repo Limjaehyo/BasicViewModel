@@ -36,8 +36,9 @@ abstract public class BaseViewModelFragment<T extends ViewModel> extends Fragmen
         observer.enable();
     }
 
-    public CompositeDisposable getCompositeDisposable(){
-        return observer.getDisposable();
+    public void putDisposableMap(String tag, Disposable disposable) {
+        observer.putDisposableMap(tag, disposable);
+
     }
     @Override
     public void onStop() {
@@ -47,13 +48,6 @@ abstract public class BaseViewModelFragment<T extends ViewModel> extends Fragmen
         }
     }
 
-    public void addDisposable(Disposable disposable) {
-        if (observer != null) {
-            observer.addDisposable(disposable);
-        }
-
-
-    }
 
 
 
