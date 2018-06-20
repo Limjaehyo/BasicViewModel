@@ -56,6 +56,10 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
 
     }
 
+    public CompositeDisposable getDisposable() {
+        return observer.getDisposable();
+    }
+
     public MaterialDialog showCustomDialog(Context context, String msg) {
         this.materialDialog =  new MaterialDialog.Builder(context).build();
         return materialDialog;

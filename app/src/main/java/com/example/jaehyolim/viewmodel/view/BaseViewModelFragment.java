@@ -13,10 +13,10 @@ import io.reactivex.disposables.Disposable;
 
 abstract public class BaseViewModelFragment<T extends ViewModel> extends Fragment {
 
-    public abstract T viewModel();
+    protected abstract T viewModel();
 
 
-    public T mViewModel;
+    protected T mViewModel;
     private MaterialDialog materialDialog;
     private DisposableLifecycleObserver observer;
 
@@ -39,6 +39,10 @@ abstract public class BaseViewModelFragment<T extends ViewModel> extends Fragmen
     public void putDisposableMap(String tag, Disposable disposable) {
         observer.putDisposableMap(tag, disposable);
 
+    }
+
+    public CompositeDisposable getDisposable() {
+        return observer.getDisposable();
     }
     @Override
     public void onStop() {

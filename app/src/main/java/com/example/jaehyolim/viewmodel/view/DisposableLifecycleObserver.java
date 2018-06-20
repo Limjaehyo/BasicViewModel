@@ -54,6 +54,11 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
         }
 
     }
+
+    public CompositeDisposable getDisposable() {
+        return mDisposable;
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void stop() {
         saveDisposableMap.clear();
