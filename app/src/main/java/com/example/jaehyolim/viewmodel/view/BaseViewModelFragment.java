@@ -36,7 +36,7 @@ abstract public class BaseViewModelFragment<T extends ViewModel> extends Fragmen
         observer.enable();
     }
 
-    public void putDisposableMap(String tag, Disposable disposable) {
+    protected void putDisposableMap(String tag, Disposable disposable) {
         observer.putDisposableMap(tag, disposable);
 
     }

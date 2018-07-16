@@ -49,6 +49,7 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
             saveDisposableMap.put(tag, disposable);
         }else{
             mDisposable.remove(saveDisposableMap.get(tag));
+            saveDisposableMap.remove(tag);
             saveDisposableMap.put(tag, disposable);
             mDisposable.add(disposable);
         }

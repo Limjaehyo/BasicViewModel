@@ -38,7 +38,7 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     }
 
 
-    public void putDisposableMap(String tag, Disposable disposable) {
+    protected void putDisposableMap(String tag, Disposable disposable) {
         observer.putDisposableMap(tag, disposable);
 
     }
