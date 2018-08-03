@@ -4,7 +4,7 @@ package com.example.jaehyolim.viewmodel.util;
 public class TempRxEvent implements RxEventBus.OnEventListener<Events.ReservationDetail> {
 
     public TempRxEvent() {
-        RxEventBus.getInstance().registerListener(this, Events.ReservationDetail.class);
+        RxEventBus.getInstance().registerListener("key",this, Events.ReservationDetail.class);
     }
 
 
