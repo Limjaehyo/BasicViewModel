@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 /**
@@ -19,14 +20,16 @@ import io.reactivex.subjects.Subject;
  */
 
 public class RxEventBus {
-    private Subject<Object> mSubject;
+    private Subject<Object> mPublishSubject;
+    private Subject<Object> mBehaviorSubject;
 
     private static volatile RxEventBus INSTANCE = null;
 
-    private Map<OnEventListener<?>, Disposable> map = new HashMap<>();
+    private Map<String, Disposable> map = new HashMap<>();
 
     private RxEventBus() {
-        mSubject = BehaviorSubject.create().toSerialized();
+        mPublishSubject = PublishSubject.create().toSerialized();
+        mBehaviorSubject = BehaviorSubject.create().toSerialized();
     }
 
     public static synchronized RxEventBus getInstance() {
@@ -48,20 +51,36 @@ public class RxEventBus {
      * @param type
      * @param <E>
      */
-    public <E> void registerListener(OnEventListener<E> listener, Class<E> type) {
-        final Disposable subscription = mSubject.ofType(type) // filter
+    public <E> void registerListener(String key, OnEventListener<E> listener, Class<E> type) {
+        final Disposable subscription = mPublishSubject.ofType(type) // filter
 
                 .subscribe(listener::onEvent, throwable -> {
                     Log.e("EventBus", throwable.getMessage(), throwable);
                 });
-        map.put(listener, subscription);
+        map.put(key, subscription);
     }
 
-    public <E> void unregisterListener(OnEventListener<E> listener) {
-        Disposable disposable = map.get(listener);
+    public <E> void oneEventRegisterListener(String key, OnEventListener<E> listener, Class<E> type) {
+        if (map.get(key) != null) {
+            map.get(key).dispose();
+            map.remove(key);
+        }
+        final Disposable subscription = mBehaviorSubject.ofType(type) // filter
+                .subscribe(event -> {
+                    listener.onEvent(event);
+                    unregisterListener(key);
+                }, throwable -> {
+                    Log.e("EventBus", throwable.getMessage(), throwable);
+
+                });
+        map.put(key, subscription);
+    }
+
+    public void unregisterListener(String key) {
+        final Disposable disposable = map.get(key);
         disposable.dispose();
-        if (map.containsKey(listener)) {
-            map.remove(listener);
+        if (map.containsKey(key)) {
+            map.remove(key);
         }
     }
 
@@ -71,11 +90,18 @@ public class RxEventBus {
      * @param event
      */
     public void postEvent(Object event) { // push event to queue
-        mSubject.onNext(event);
+        mPublishSubject.onNext(event);
     }
 
-    public Observable<Object> getObservable() {
-        return mSubject;
+    public void postOneEvent(Object event) { // push event to queue
+        mBehaviorSubject.onNext(event);
+    }
+
+    public Observable<Object> getPublishObservable() {
+        return mPublishSubject;
+    }
+    public Observable<Object> getBegaviorObservable() {
+        return mBehaviorSubject;
     }
 
     /**
@@ -87,7 +113,7 @@ public class RxEventBus {
      * @return
      */
     public <T> Disposable onEventMainThread(Class<T> clazz, Consumer<T> handler) {
-        return mSubject
+        return mPublishSubject
                 .ofType(clazz)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handler);
