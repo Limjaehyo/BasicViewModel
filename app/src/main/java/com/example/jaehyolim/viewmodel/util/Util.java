@@ -15,9 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Set;
 
-/**
- * Created by sjlee on 2015-11-30.
- */
+
 public class Util {
 
 
@@ -62,7 +60,11 @@ public class Util {
     public static <R extends Object> R getSharedPreferences(Context context,String key) throws ClassCastException {
         final SharedPreferences settings = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         Object value = settings.getAll().get(key);
-        return (R) value;
+        if (value != null) {
+            return  (R) value;
+        }else{
+            return (R) "";
+        }
 
     }
 

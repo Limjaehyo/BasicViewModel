@@ -32,6 +32,11 @@ public class TempRepository extends BaseRepository<BaseModel> {
     }
 
     @Override
+    public Observable<BaseModel> getResponse(String... age) {
+        return null;
+    }
+
+    @Override
     public Map<String, String> queryValuesMap() {
         Map<String, String> valuesMap = getValuesMap();
         valuesMap.put("option","list");

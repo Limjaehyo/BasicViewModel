@@ -9,12 +9,13 @@ import java.util.Map;
 
 /**
  * ViewModel -> Repository 동신을위한 최상위 Repository
+ *
  * @param <T>
  */
-public abstract class BaseRepository<T extends BaseModel > implements getResponseInterFace<T> {
+public abstract class BaseRepository<T extends BaseModel> implements getResponseInterFace<T> {
 
     protected enum TYPE {
-        HOTEL("호텔"), GAJAGO("액티비티"), TABLE("다이닝");
+        APPLE("사과"), Orange("오렌지");
         final private String name;
 
         TYPE(String name) {
@@ -26,8 +27,9 @@ public abstract class BaseRepository<T extends BaseModel > implements getRespons
         }
 
     }
+
     protected String isTest() {
-        return  BuildConfig.DEBUG ? "Y" : "N";
+        return BuildConfig.DEBUG ? "Y" : "N";
     }
 
     /**
@@ -50,6 +52,7 @@ public abstract class BaseRepository<T extends BaseModel > implements getRespons
         }
         return map;
     }
+
     @NonNull
     private Map<String, String> getDefaultMap(TYPE type, String apiKey) {
         final Map<String, String> map = new LinkedHashMap<>();
@@ -58,6 +61,7 @@ public abstract class BaseRepository<T extends BaseModel > implements getRespons
 
         return map;
     }
+
     protected Map<String, String> getValuesMap() {
         return new LinkedHashMap<>();
     }
