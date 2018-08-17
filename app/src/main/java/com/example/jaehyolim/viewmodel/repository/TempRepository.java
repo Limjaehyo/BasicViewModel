@@ -1,5 +1,7 @@
 package com.example.jaehyolim.viewmodel.repository;
 
+import com.example.jaehyolim.viewmodel.model.BaseModel;
+
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -31,10 +33,6 @@ public class TempRepository extends BaseRepository<BaseModel> {
                 .getAreaSelect(("leisure_area"), ("hotelnjoy"), ("gajago"), (isTest()));*/
     }
 
-    @Override
-    public Observable<BaseModel> getResponse(String... age) {
-        return null;
-    }
 
     @Override
     public Map<String, String> queryValuesMap() {

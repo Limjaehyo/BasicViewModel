@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import com.example.jaehyolim.viewmodel.repository.BaseModel;
+import com.example.jaehyolim.viewmodel.model.BaseModel;
 
 import io.reactivex.Observable;
 

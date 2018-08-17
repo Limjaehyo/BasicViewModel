@@ -4,9 +4,14 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.WindowManager;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -18,6 +23,7 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     private DisposableLifecycleObserver observer;
 
     protected abstract T viewModel();
+
     protected T mViewModel;
     private MaterialDialog materialDialog;
 
@@ -40,7 +46,7 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     }
     /*리스타트할 처음 화면으로 로딩*/
 
-    private  void reStart(){
+    private void reStart() {
 //        final Intent intent = new Intent(this, LoadingActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -60,7 +66,6 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     }
 
 
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -77,10 +82,22 @@ abstract public class BaseViewModelActivity<T extends ViewModel> extends AppComp
     }
 
     public MaterialDialog showCustomDialog(Context context, String msg) {
-        this.materialDialog =  new MaterialDialog.Builder(context).build();
+        this.materialDialog = new MaterialDialog.Builder(context).build();
+        materialDialog.setTitle("알림");
+        materialDialog.setContent(msg);
+        if (materialDialog.getWindow() != null) {
+            materialDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            final int width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.90);
+            materialDialog.getWindow().setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+        materialDialog.setCanceledOnTouchOutside(false);
+
         return materialDialog;
     }
 
+    public void removeDisposable(String tag) {
+        observer.removeDisposable(tag);
+    }
 
 
    /* @Override

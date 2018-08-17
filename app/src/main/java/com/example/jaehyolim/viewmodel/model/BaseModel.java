@@ -1,4 +1,4 @@
-package com.example.jaehyolim.viewmodel.repository;
+package com.example.jaehyolim.viewmodel.model;
 
 import com.google.gson.annotations.SerializedName;
 

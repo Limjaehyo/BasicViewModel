@@ -56,6 +56,12 @@ public class DisposableLifecycleObserver implements LifecycleObserver {
 
     }
 
+    public void removeDisposable(String tag) {
+        if (saveDisposableMap.get(tag) != null) {
+            mDisposable.remove(saveDisposableMap.get(tag));
+            saveDisposableMap.remove(tag);
+        }
+    }
     public CompositeDisposable getDisposable() {
         return mDisposable;
     }

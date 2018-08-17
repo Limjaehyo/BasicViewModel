@@ -3,6 +3,7 @@ package com.example.jaehyolim.viewmodel.repository;
 import android.support.annotation.NonNull;
 
 import com.example.jaehyolim.viewmodel.BuildConfig;
+import com.example.jaehyolim.viewmodel.model.BaseModel;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

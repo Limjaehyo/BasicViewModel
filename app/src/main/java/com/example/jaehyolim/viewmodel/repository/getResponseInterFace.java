@@ -7,6 +7,5 @@ import io.reactivex.Observable;
 
 public interface getResponseInterFace<T> {
     Observable<T> getResponse();
-    Observable<T> getResponse(String... age);
     Map<String, String> queryValuesMap();
 }
