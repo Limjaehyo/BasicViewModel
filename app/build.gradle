@@ -52,4 +52,5 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'android.arch.paging:runtime:1.0.1'
 }
