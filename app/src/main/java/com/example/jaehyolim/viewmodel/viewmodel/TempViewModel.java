@@ -92,7 +92,11 @@ public class TempViewModel extends BaseViewModel<BaseModel, TempViewModel.TempIn
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new TempViewModel(mApplication,anInterface);
+            if (modelClass.isAssignableFrom(TempViewModel.class)) {
+                return (T) new TempViewModel(mApplication,anInterface);
+            }
+            throw  new IllegalArgumentException("Unknown ViewModel class");
+
         }
     }
     public interface TempInterface extends BaseVewModelInterface {
