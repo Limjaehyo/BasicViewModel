@@ -54,6 +54,22 @@ public abstract class BaseRepository<T extends BaseModel> implements getResponse
         return map;
     }
 
+    protected Map<String, String> getQuery( TYPE type, String apiKey, Map<String, String> valuesMap) {
+        final Map<String, String> map = getDefaultMap( type, apiKey);
+
+        //추가적으로 받은 map key Values 룰 저장한다. key 값으로 받아온 values 값이 빈경우 넣지 않는ㄴ다.
+        for (String key : valuesMap.keySet()) {
+            try {
+                if (!valuesMap.get(key).isEmpty()) {
+                    map.put(key, (queryValuesMap().get(key)));
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return map;
+    }
+
+
     @NonNull
     private Map<String, String> getDefaultMap(TYPE type, String apiKey) {
         final Map<String, String> map = new LinkedHashMap<>();

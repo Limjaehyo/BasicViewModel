@@ -39,7 +39,7 @@ public class MainActivity extends BaseViewModelActivity<TempViewModel> implement
         },throwable -> {}));*/
         List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25);
 
-        Observable.fromIterable(integers).take(20).subscribe(new Consumer<Integer>() {
+        getDisposable().add(Observable.fromIterable(integers).take(20).subscribe(new Consumer<Integer>() {
             ArrayList<Integer> data = new ArrayList<>();
             @Override
             public void accept(Integer integer) throws Exception {
@@ -53,7 +53,7 @@ public class MainActivity extends BaseViewModelActivity<TempViewModel> implement
             }
         },() -> {
 
-        });
+        }));
     }
 
 
