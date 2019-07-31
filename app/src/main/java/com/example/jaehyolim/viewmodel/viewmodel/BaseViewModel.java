@@ -2,7 +2,10 @@ package com.example.jaehyolim.viewmodel.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.content.Context;
 import android.databinding.ObservableField;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -24,10 +27,7 @@ import io.reactivex.schedulers.Schedulers;
  * @param <T>
  * @param <A>
  */
-abstract public class BaseViewModel<T extends BaseModel, I extends BaseVewModelInterface, A> extends AndroidViewModel {
-    abstract protected Observable<T> getObservable();
-
-    abstract protected Observable<T> getObservable(A args);
+abstract public class BaseViewModel<I extends BaseVewModelInterface, A> extends AndroidViewModel {
 
     public final ObservableField<Boolean> isProgress = new ObservableField<>();
     protected final I viewModelInterface;
@@ -64,34 +64,37 @@ abstract public class BaseViewModel<T extends BaseModel, I extends BaseVewModelI
     }
 
     protected synchronized <O extends BaseModel> void executeObservable(String tag, Observable<O> observable, ObservableField<Boolean> isField, Consumer<O> consumer, Consumer<? super Throwable> errorConsumer) {
-
-        viewModelInterface.putDisposableMap(tag,
-                observable.subscribeOn(Schedulers.io())
-                        .doOnSubscribe(disposable -> {
-                            isProgress.set(true);
-                            if (isField != null) {
-                                isField.set(false);
-                            }
-                        })
-                        .retry((count, throwable) -> {
+        if (isNetWork()) {
+            viewModelInterface.putDisposableMap(tag,
+                    observable.subscribeOn(Schedulers.io())
+                            .doOnSubscribe(disposable -> {
+                                isProgress.set(true);
+                                if (isField != null) {
+                                    isField.set(false);
+                                }
+                            })
+                            .retry((count, throwable) -> {
                       /*      Log.e("retry", "throwable " + throwable.getMessage());
                             if (throwable instanceof IOException) {
                                 Toast.makeText(application, "IOExeeption", Toast.LENGTH_SHORT).show();
                             }*/
-                            return throwable instanceof IOException && count <= MAX_RETRY;
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(consumer, throwable -> {
-                            if (errorConsumer != null) {
-                                try {
-                                    errorConsumer.accept(throwable);
-                                } catch (Exception ignored) {
+                                return throwable instanceof IOException && count <= MAX_RETRY;
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(consumer, throwable -> {
+                                if (errorConsumer != null) {
+                                    try {
+                                        errorConsumer.accept(throwable);
+                                    } catch (Exception ignored) {
+                                    }
                                 }
-                            }
-                            viewModelInterface.showMessageDialog(throwable instanceof IOException ? _FAILMSG : throwable.getMessage());
-                            isProgress.set(false);
-                        }, () -> isProgress.set(false))
-        );
+                                viewModelInterface.showMessageDialog(throwable instanceof IOException ? _FAILMSG : throwable.getMessage());
+                                isProgress.set(false);
+                            }, () -> isProgress.set(false))
+            );
+        }else{
+            viewModelInterface.showMessageDialog("인터넷 연결이 원활하지 않습니다.");
+        }
     }
 
 
@@ -100,6 +103,12 @@ abstract public class BaseViewModel<T extends BaseModel, I extends BaseVewModelI
         super.onCleared();
         mDisposable.dispose();
         mDisposable.clear();
+    }
+
+    private boolean isNetWork() {
+        ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 import io.reactivex.Observable;
 
 
-public class TempViewModel extends BaseViewModel<BaseModel, TempViewModel.TempInterface,Object> {
+public class TempViewModel extends BaseViewModel< TempViewModel.TempInterface,Object> {
     private Executor executor;
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<BaseModel>> articleLiveData;
@@ -31,16 +31,6 @@ public class TempViewModel extends BaseViewModel<BaseModel, TempViewModel.TempIn
         executor = Executors.newFixedThreadPool(5);
     }
 
-    @Override
-    protected Observable<BaseModel> getObservable() {
-
-        return TempRepository.getInstance().getResponse();
-    }
-
-    @Override
-    protected Observable<BaseModel> getObservable(Object args) {
-        return null;
-    }
 
 
 
